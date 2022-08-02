@@ -29,20 +29,44 @@ with open(filename,'r') as f:
     s = f.read()
 
 if enableSsl:
-    ssl_conf = re.search('(client_encryption_options:.*?)[\n\r]{2}',s,re.M|re.DOTALL).group(1)
+    ssl_conf = re.search(
+        '(client_encryption_options:.*?)[\n\r]{2}', s, re.M | re.DOTALL
+    )[1]
+
     ssl_conf_new = re.sub('enabled:.*','enabled: true', ssl_conf)
-    ssl_conf_new = re.sub('keystore:.*','keystore: %s' % keystore, ssl_conf_new)
-    ssl_conf_new = re.sub('keystore_password:.*','keystore_password: %s' % keystore_password, ssl_conf_new)
+    ssl_conf_new = re.sub('keystore:.*', f'keystore: {keystore}', ssl_conf_new)
+    ssl_conf_new = re.sub(
+        'keystore_password:.*',
+        f'keystore_password: {keystore_password}',
+        ssl_conf_new,
+    )
+
     s = s.replace(ssl_conf, ssl_conf_new)
 
 if enableClientAuth:
-    ssl_conf = re.search('(client_encryption_options:.*?)[\n\r]{2}',s,re.M|re.DOTALL).group(1)
+    ssl_conf = re.search(
+        '(client_encryption_options:.*?)[\n\r]{2}', s, re.M | re.DOTALL
+    )[1]
+
     ssl_conf_new = re.sub('enabled:.*','enabled: true', ssl_conf)
-    ssl_conf_new = re.sub('keystore:.*','keystore: %s' % keystore, ssl_conf_new)
-    ssl_conf_new = re.sub('keystore_password:.*','keystore_password: %s' % keystore_password, ssl_conf_new)
+    ssl_conf_new = re.sub('keystore:.*', f'keystore: {keystore}', ssl_conf_new)
+    ssl_conf_new = re.sub(
+        'keystore_password:.*',
+        f'keystore_password: {keystore_password}',
+        ssl_conf_new,
+    )
+
     ssl_conf_new = re.sub('require_client_auth:.*','require_client_auth: true', ssl_conf_new)
-    ssl_conf_new = re.sub('truststore:.*','truststore: %s' % truststore, ssl_conf_new)
-    ssl_conf_new = re.sub('truststore_password:.*','truststore_password: %s' % truststore_password, ssl_conf_new)
+    ssl_conf_new = re.sub(
+        'truststore:.*', f'truststore: {truststore}', ssl_conf_new
+    )
+
+    ssl_conf_new = re.sub(
+        'truststore_password:.*',
+        f'truststore_password: {truststore_password}',
+        ssl_conf_new,
+    )
+
     s = s.replace(ssl_conf, ssl_conf_new)
 
 if enableBop:
